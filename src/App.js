@@ -1,73 +1,37 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Transition } from '@headlessui/react';
-import blackMountain from './images/20171213-mp6a6604.jpg';
+import Sidebar from './components/sidebar';
+import WeatherData from './components/weatherData';
+import axios from 'axios';
 
 function App() {
   const [profileDropdownIsOpen, setProfileDropdownIsOpen] = useState(false);
 
+  const [location, setLocation] = useState('');
+
+  const [state, setState] = useState({
+    status: location ? 'pending' : 'idle',
+    weatherData: null,
+    error: null,
+  });
+  const { status, weatherData, error } = state;
+
+  useEffect(() => {
+    setState({ status: 'pending' });
+    axios(
+      `https://api.weatherbit.io/v2.0/current?key=${process.env.REACT_APP_API_KEY}&units=I&lat=33.8255729&lon=-116.7571251`
+    ).then(
+      (response) => {
+        console.log(response);
+        setState({ weatherData: response.data.data[0], status: 'resolved' });
+      },
+      (error) => setState({ error, status: 'error' })
+    );
+  }, []);
+
   return (
     <div className='h-screen bg-gray-100 overflow-hidden flex'>
-      {/* <!-- Static sidebar for desktop --> */}
-      <div className='bg-gray-50 hidden md:flex md:flex-shrink-0'>
-        <div className='w-80 flex flex-col'>
-          <div className='border-r border-gray-200 p-6 flex flex-col flex-grow overflow-y-auto'>
-            <div className=''>
-              <img
-                className='w-full object-cover'
-                src={blackMountain}
-                alt='Paul Robinson climbing Teahupoo V12 in Black Mountain, CA'
-              />
-            </div>
-            <div className='mt-6 text-7xl font-light'>12°</div>
-            <div className='mt-6 pb-8 border-b'>
-              <time dateTime='2011-11-18 14:54'>
-                Monday, <span className='text-gray-600'>16:00</span>
-              </time>
-            </div>
-            <div className='mt-6 flex items-center'>
-              <svg
-                className='h-5 w-5'
-                xmlns='http://www.w3.org/2000/svg'
-                fill='none'
-                viewBox='0 0 24 24'
-                stroke='currentColor'
-              >
-                <path
-                  strokeLinecap='round'
-                  strokeLinejoin='round'
-                  strokeWidth={2}
-                  d='M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z'
-                />
-              </svg>{' '}
-              <span className='ml-2'>Mostly Cloudy</span>
-            </div>
-            <div className='mt-2 flex items-center'>
-              <svg
-                className='h-5 w-5'
-                xmlns='http://www.w3.org/2000/svg'
-                fill='none'
-                viewBox='0 0 24 24'
-                stroke='currentColor'
-              >
-                <path
-                  strokeLinecap='round'
-                  strokeLinejoin='round'
-                  strokeWidth={2}
-                  d='M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z'
-                />
-              </svg>{' '}
-              <span className='ml-2'>Mostly Cloudy</span>
-            </div>
-            <div className='overflow-hidden rounded-lg'>
-              <img
-                className='w-full object-cover'
-                src={blackMountain}
-                alt='Paul Robinson climbing Teahupoo V12 in Black Mountain, CA'
-              />
-            </div>
-          </div>
-        </div>
-      </div>
+      <Sidebar weatherData={weatherData} status={status} />
       <div className='flex-1 max-w-4xl mx-auto w-0 flex flex-col md:px-8'>
         <div className='relative z-10 flex-shrink-0 h-16  border-b border-gray-200 flex'>
           <button className='border-r border-gray-200 px-4 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 md:hidden'>
@@ -202,267 +166,7 @@ function App() {
             </div>
           </div>
         </div>
-
-        <main
-          className='flex-1 relative overflow-y-auto focus:outline-none'
-          tabIndex='0'
-        >
-          <div className='py-6'>
-            <div className='flex justify-between'>
-              <div className='flex flex-col items-center p-2 bg-gray-50 rounded-xl text-sm'>
-                <div>Sun</div>
-                <div className='mt-3'>
-                  <img
-                    className='h-10 w-10 rounded-full'
-                    src='https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixqx=NUbxqHJFDM&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
-                    alt=''
-                  />
-                </div>
-                <div className='flex'>
-                  <span>16°</span>
-                  <span className='ml-2'>32°</span>
-                </div>
-              </div>
-
-              <div className='flex flex-col items-center p-2 bg-gray-50 rounded-xl text-sm'>
-                <div>Mon</div>
-                <div className='mt-3'>
-                  <img
-                    className='h-10 w-10 rounded-full'
-                    src='https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixqx=NUbxqHJFDM&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
-                    alt=''
-                  />
-                </div>
-                <div className='flex'>
-                  <span>16°</span>
-                  <span className='ml-2'>32°</span>
-                </div>
-              </div>
-
-              <div className='flex flex-col items-center p-2 bg-gray-50 rounded-xl text-sm'>
-                <div>Tue</div>
-                <div className='mt-3'>
-                  <img
-                    className='h-10 w-10 rounded-full'
-                    src='https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixqx=NUbxqHJFDM&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
-                    alt=''
-                  />
-                </div>
-                <div className='flex'>
-                  <span>16°</span>
-                  <span className='ml-2'>32°</span>
-                </div>
-              </div>
-
-              <div className='flex flex-col items-center p-2 bg-gray-50 rounded-xl text-sm'>
-                <div>Wed</div>
-                <div className='mt-3'>
-                  <img
-                    className='h-10 w-10 rounded-full'
-                    src='https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixqx=NUbxqHJFDM&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
-                    alt=''
-                  />
-                </div>
-                <div className='flex'>
-                  <span>16°</span>
-                  <span className='ml-2'>32°</span>
-                </div>
-              </div>
-
-              <div className='flex flex-col items-center p-2 bg-gray-50 rounded-xl text-sm'>
-                <div>Thu</div>
-                <div className='mt-3'>
-                  <img
-                    className='h-10 w-10 rounded-full'
-                    src='https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixqx=NUbxqHJFDM&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
-                    alt=''
-                  />
-                </div>
-                <div className='flex'>
-                  <span>16°</span>
-                  <span className='ml-2'>32°</span>
-                </div>
-              </div>
-
-              <div className='flex flex-col items-center p-2 bg-gray-50 rounded-xl text-sm'>
-                <div>Fri</div>
-                <div className='mt-3'>
-                  <img
-                    className='h-10 w-10 rounded-full'
-                    src='https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixqx=NUbxqHJFDM&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
-                    alt=''
-                  />
-                </div>
-                <div className='flex'>
-                  <span>16°</span>
-                  <span className='ml-2'>32°</span>
-                </div>
-              </div>
-
-              <div className='flex flex-col items-center p-2 bg-gray-50 rounded-xl text-sm'>
-                <div>Sat</div>
-                <div className='mt-3'>
-                  <img
-                    className='h-10 w-10 rounded-full'
-                    src='https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixqx=NUbxqHJFDM&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
-                    alt=''
-                  />
-                </div>
-                <div className='flex'>
-                  <span>16°</span>
-                  <span className='ml-2'>32°</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <h2 className='text-lg font-semibold'>Today's Highlights</h2>
-          <div className='grid grid-cols-3 gap-4 mt-4'>
-            <div className='p-4 bg-gray-50 rounded-lg'>
-              <h3 className='text-gray-600'>Wind Status</h3>
-              <div className='py-4'>
-                <span className='text-3xl mr-2'>7.70</span>
-                mph
-              </div>
-              <div className='flex items-center'>
-                <svg
-                  className='h-5 w-5'
-                  xmlns='http://www.w3.org/2000/svg'
-                  fill='none'
-                  viewBox='0 0 24 24'
-                  stroke='currentColor'
-                >
-                  <path
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    strokeWidth={2}
-                    d='M15 13l-3 3m0 0l-3-3m3 3V8m0 13a9 9 0 110-18 9 9 0 010 18z'
-                  />
-                </svg>
-                <span className='ml-1'>SW</span>
-              </div>
-            </div>
-            <div className='p-4 bg-gray-50 rounded-lg'>
-              <h3 className='text-gray-600'>Wind Status</h3>
-              <div className='py-4'>
-                <span className='text-3xl mr-2'>7.70</span>
-                mph
-              </div>
-              <div className='flex items-center'>
-                <svg
-                  className='h-5 w-5'
-                  xmlns='http://www.w3.org/2000/svg'
-                  fill='none'
-                  viewBox='0 0 24 24'
-                  stroke='currentColor'
-                >
-                  <path
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    strokeWidth={2}
-                    d='M15 13l-3 3m0 0l-3-3m3 3V8m0 13a9 9 0 110-18 9 9 0 010 18z'
-                  />
-                </svg>
-                <span className='ml-1'>SW</span>
-              </div>
-            </div>
-            <div className='p-4 bg-gray-50 rounded-lg'>
-              <h3 className='text-gray-600'>Wind Status</h3>
-              <div className='py-4'>
-                <span className='text-3xl mr-2'>7.70</span>
-                mph
-              </div>
-              <div className='flex items-center'>
-                <svg
-                  className='h-5 w-5'
-                  xmlns='http://www.w3.org/2000/svg'
-                  fill='none'
-                  viewBox='0 0 24 24'
-                  stroke='currentColor'
-                >
-                  <path
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    strokeWidth={2}
-                    d='M15 13l-3 3m0 0l-3-3m3 3V8m0 13a9 9 0 110-18 9 9 0 010 18z'
-                  />
-                </svg>
-                <span className='ml-1'>SW</span>
-              </div>
-            </div>
-            <div className='p-4 bg-gray-50 rounded-lg'>
-              <h3 className='text-gray-600'>Wind Status</h3>
-              <div className='py-4'>
-                <span className='text-3xl mr-2'>7.70</span>
-                mph
-              </div>
-              <div className='flex items-center'>
-                <svg
-                  className='h-5 w-5'
-                  xmlns='http://www.w3.org/2000/svg'
-                  fill='none'
-                  viewBox='0 0 24 24'
-                  stroke='currentColor'
-                >
-                  <path
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    strokeWidth={2}
-                    d='M15 13l-3 3m0 0l-3-3m3 3V8m0 13a9 9 0 110-18 9 9 0 010 18z'
-                  />
-                </svg>
-                <span className='ml-1'>SW</span>
-              </div>
-            </div>
-            <div className='p-4 bg-gray-50 rounded-lg'>
-              <h3 className='text-gray-600'>Wind Status</h3>
-              <div className='py-4'>
-                <span className='text-3xl mr-2'>7.70</span>
-                mph
-              </div>
-              <div className='flex items-center'>
-                <svg
-                  className='h-5 w-5'
-                  xmlns='http://www.w3.org/2000/svg'
-                  fill='none'
-                  viewBox='0 0 24 24'
-                  stroke='currentColor'
-                >
-                  <path
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    strokeWidth={2}
-                    d='M15 13l-3 3m0 0l-3-3m3 3V8m0 13a9 9 0 110-18 9 9 0 010 18z'
-                  />
-                </svg>
-                <span className='ml-1'>SW</span>
-              </div>
-            </div>
-            <div className='p-4 bg-gray-50 rounded-lg'>
-              <h3 className='text-gray-600'>Wind Status</h3>
-              <div className='py-4'>
-                <span className='text-3xl mr-2'>7.70</span>
-                mph
-              </div>
-              <div className='flex items-center'>
-                <svg
-                  className='h-5 w-5'
-                  xmlns='http://www.w3.org/2000/svg'
-                  fill='none'
-                  viewBox='0 0 24 24'
-                  stroke='currentColor'
-                >
-                  <path
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    strokeWidth={2}
-                    d='M15 13l-3 3m0 0l-3-3m3 3V8m0 13a9 9 0 110-18 9 9 0 010 18z'
-                  />
-                </svg>
-                <span className='ml-1'>SW</span>
-              </div>
-            </div>
-          </div>
-        </main>
+        <WeatherData />
       </div>
     </div>
   );
