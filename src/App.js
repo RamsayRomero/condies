@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Transition } from '@headlessui/react';
 import Sidebar from './components/sidebar';
 import WeatherData from './components/weatherData';
+import Forecast from './components/forecast';
 import axios from 'axios';
 
 function App() {
@@ -18,11 +19,16 @@ function App() {
 
   useEffect(() => {
     setState({ status: 'pending' });
-    axios(
-      `https://api.weatherbit.io/v2.0/current?key=${process.env.REACT_APP_API_KEY}&units=I&lat=33.8255729&lon=-116.7571251`
-    ).then(
+    axios('https://api.weatherbit.io/v2.0/current', {
+      params: {
+        key: process.env.REACT_APP_API_KEY,
+        units: 'I',
+        lat: '33.8255729',
+        lon: -116.7571251,
+      },
+    }).then(
       (response) => {
-        console.log(response);
+        console.log(response.data);
         setState({ weatherData: response.data.data[0], status: 'resolved' });
       },
       (error) => setState({ error, status: 'error' })
@@ -166,7 +172,20 @@ function App() {
             </div>
           </div>
         </div>
-        <WeatherData />
+        <main
+          className='flex-1 relative overflow-y-auto focus:outline-none'
+          tabIndex='0'
+        >
+          <Forecast />
+          <h2 className='text-lg font-semibold'>Today's Highlights</h2>
+          {status === 'pending' ? (
+            <div>Loading</div>
+          ) : status === 'error' ? (
+            <div>Error</div>
+          ) : status === 'resolved' ? (
+            <WeatherData weatherData={weatherData} />
+          ) : null}
+        </main>
       </div>
     </div>
   );
