@@ -14,6 +14,8 @@ import buttermilks from './images/buttermilks.jpg';
 import happies from './images/happies.webp';
 import horseFlats from './images/horse_flats.jpg';
 import tuolumne from './images/tuolumne.jpg';
+import { ErrorBoundary } from 'react-error-boundary';
+import ErrorFallback from './components/errorFallback';
 
 const areas = [
   {
@@ -107,17 +109,15 @@ function App() {
         error={error}
       />
       <div className='flex-1 max-w-4xl mx-auto w-0 flex flex-col px-4 md:px-8'>
-        <h1 className='uppercase font-light py-4 text-4xl tracking-widest'>
-          Condies
-        </h1>
-        <div className='relative z-10 flex-shrink-0 h-16  mt-2 flex'>
+        <div className='relative z-10 flex-shrink-0 h-16  mt-6 flex'>
           <div className='flex-1 flex justify-between px-4 md:px-0'>
             <div className='flex-1 flex'>
-              <form className='w-full flex md:ml-0'>
+              <div className='w-full flex md:ml-0'>
                 <Autocomplete
                   id='search_field'
                   blurOnSelect
                   disableClearable
+                  autoHighlight
                   value={location}
                   onChange={(event, newValue) => {
                     setLocation(newValue);
@@ -133,14 +133,14 @@ function App() {
                     />
                   )}
                 />
-              </form>
+              </div>
             </div>
             <div className='ml-4 flex items-center md:ml-6'>
               <button
                 onClick={() => setUnits('I')}
                 className={`${
                   units === 'I'
-                    ? 'bg-black text-white hover:bg-gray-800'
+                    ? 'bg-black text-white hover:bg-gray-700'
                     : 'bg-white text-black hover:bg-gray-200'
                 }  inline-flex items-center h-9 w-9 justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
               >
@@ -150,7 +150,7 @@ function App() {
                 onClick={() => setUnits('M')}
                 className={`${
                   units === 'M'
-                    ? 'bg-black text-white hover:bg-gray-800'
+                    ? 'bg-black text-white hover:bg-gray-700'
                     : 'bg-white text-black hover:bg-gray-200'
                 } ml-2 inline-flex items-center h-9 w-9 justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
               >
@@ -163,7 +163,13 @@ function App() {
           className='flex-1 relative overflow-y-auto focus:outline-none'
           tabIndex='0'
         >
-          <Forecast location={location} units={units} />
+          <ErrorBoundary
+            FallbackComponent={ErrorFallback}
+            onReset={() => setLocation(areas[0])}
+            resetKeys={[location]}
+          >
+            <Forecast location={location} units={units} />
+          </ErrorBoundary>
           <h2 className='text-lg font-semibold'>Today's Highlights</h2>
           {status === 'pending' ? (
             <div>Loading</div>

@@ -15,7 +15,7 @@ export default function Sidebar({ weatherData, status, error, location }) {
             </div>
           ) : status === 'resolved' ? (
             <div>
-              <div className='mt-2 text-2xl'>{location.title}</div>
+              <h2 className='text-2xl'>{location.title}</h2>
               <div className='mt-6 overflow-hidden rounded-lg'>
                 <img
                   className='w-full object-cover'

@@ -30,15 +30,15 @@ export default function Forecast({ location, units }) {
     );
   }, [location, units]);
 
+  if (status === 'error') {
+    throw error;
+  }
+
   return (
     <div className='py-4 overflow-x-auto'>
       <div className='inline-flex space-x-4 sm:flex justify-between'>
         {status === 'pending' ? (
           <div>Loading...</div>
-        ) : status === 'error' ? (
-          <div>
-            Something went wrong :( <span>{error.message}</span>
-          </div>
         ) : status === 'resolved' ? (
           forecastData.map((day) => {
             const zonedDate = utcToZonedTime(day.valid_date, day.timezone);
