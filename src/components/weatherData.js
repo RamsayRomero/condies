@@ -1,70 +1,56 @@
-export default function WeatherData({ weatherData }) {
+import snowIcon from '../images/icons/s06d.png';
+import rainIcon from '../images/icons/u00d.png';
+
+export default function WeatherData({ weatherData, units }) {
   return (
-    <div className='grid grid-cols-3 gap-4 mt-4'>
-      <div className='p-4 bg-gray-50 rounded-lg'>
+    <div className='grid grid-cols-2 sm:grid-cols-3 gap-4 my-4'>
+      <div className='p-4 bg-white rounded-2xl h-36'>
         <h3 className='text-gray-600'>UV Index</h3>
-        <div className='py-4'>{Math.round(weatherData.uv)}</div>
+        <div className='py-4 text-4xl'>{Math.round(weatherData.uv)}</div>
       </div>
-      <div className='p-4 bg-gray-50 rounded-lg'>
+      <div className='p-4 bg-white rounded-2xl h-36'>
         <h3 className='text-gray-600'>Wind Status</h3>
         <div className='py-4'>
-          <span className='text-3xl mr-2'>{weatherData.wind_spd}</span>
-          mph
+          <span className='text-4xl'>{Math.round(weatherData.wind_spd)}</span>
+          {units === 'I' ? ' mph' : ' m/s'}
         </div>
-        <div className='capitalize'>{weatherData.wind_cdir_full}</div>
-      </div>
-      <div className='p-4 bg-gray-50 rounded-lg'>
-        <h3 className='text-gray-600'>Sunrise & Sunset</h3>
-        <div className='py-4 flex items-center'>
-          <div className='rounded-full bg-gradient-to-br from-yellow-200 to-yellow-500'>
-            <svg
-              className='h-8 w-8 text-white'
-              xmlns='http://www.w3.org/2000/svg'
-              fill='none'
-              viewBox='0 0 24 24'
-              stroke='currentColor'
-            >
-              <path
-                strokeLinecap='round'
-                strokeLinejoin='round'
-                strokeWidth={2}
-                d='M9 11l3-3m0 0l3 3m-3-3v8m0-13a9 9 0 110 18 9 9 0 010-18z'
-              />
-            </svg>
-          </div>
-          <time className='ml-2'>{weatherData.sunrise}</time>
-        </div>
-        <div className='py-4 flex items-center'>
-          <div className='rounded-full bg-gradient-to-bl from-yellow-200 to-yellow-500'>
-            <svg
-              className='h-8 w-8 text-white'
-              xmlns='http://www.w3.org/2000/svg'
-              fill='none'
-              viewBox='0 0 24 24'
-              stroke='currentColor'
-            >
-              <path
-                strokeLinecap='round'
-                strokeLinejoin='round'
-                strokeWidth={2}
-                d='M15 13l-3 3m0 0l-3-3m3 3V8m0 13a9 9 0 110-18 9 9 0 010 18z'
-              />
-            </svg>
-          </div>
-          <time className='ml-2'>{weatherData.sunset}</time>
+        <div className='capitalize hidden sm:block'>
+          {weatherData.wind_cdir_full}
         </div>
       </div>
-      <div className='p-4 bg-gray-50 rounded-lg'>
+      <div className='p-4 bg-white rounded-2xl h-36'>
+        <h3 className='text-gray-600'>Precipitation</h3>
+        <div className='mt-2 flex items-center'>
+          <img className='w-8' src={snowIcon} alt='' />
+          <span className='ml-1'>
+            {Math.round(weatherData.snow)} {units === 'I' ? ' in/hr' : ' mm/hr'}
+          </span>
+        </div>
+        <div className='mt-2 flex items-center'>
+          <img className='w-8' src={rainIcon} alt='' />
+          <span className='ml-1'>
+            {Math.round(weatherData.precip)}{' '}
+            {units === 'I' ? ' in/hr' : ' mm/hr'}
+          </span>
+        </div>
+      </div>
+      <div className='p-4 bg-white rounded-2xl h-36'>
         <h3 className='text-gray-600'>Humidity</h3>
-        <div className='py-4'>{weatherData.rh}%</div>
+        <div className='py-4'>
+          <span className='text-4xl'>{Math.round(weatherData.rh)}</span> %
+        </div>
       </div>
-      <div className='p-4 bg-gray-50 rounded-lg'>
+      <div className='p-4 bg-white rounded-2xl h-36'>
         <h3 className='text-gray-600'>Cloud Coverage</h3>
-        <div className='py-4'>{weatherData.clouds}%</div>
+        <div className='py-4'>
+          <span className='text-4xl'>{Math.round(weatherData.clouds)}</span> %
+        </div>
       </div>
-      <div className='p-4 bg-gray-50 rounded-lg'>
+      <div className='p-4 bg-white rounded-2xl h-36'>
         <h3 className='text-gray-600'>Air Quality</h3>
-        <div className='py-4'>{weatherData.aqi}aqi</div>
+        <div className='py-4'>
+          <span className='text-4xl'>{Math.round(weatherData.aqi)}</span> aqi
+        </div>
       </div>
     </div>
   );
