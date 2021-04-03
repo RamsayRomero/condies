@@ -1,4 +1,5 @@
 import { format } from 'date-fns-tz';
+import Spinner from './spinner';
 
 export default function Sidebar({ weatherData, status, error, location }) {
   const today = new Date();
@@ -8,7 +9,7 @@ export default function Sidebar({ weatherData, status, error, location }) {
       <div className='w-80 flex flex-col'>
         <div className='border-r border-gray-200 p-6 flex flex-col flex-grow overflow-y-auto'>
           {status === 'pending' ? (
-            <div>Loading...</div>
+            <Spinner />
           ) : status === 'error' ? (
             <div>
               Something went wrong :( <span>{error.message}</span>

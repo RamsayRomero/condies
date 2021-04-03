@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useLocalStorageState } from './utils/useLocalStorageState';
 import Sidebar from './components/sidebar';
 import WeatherData from './components/weatherData';
 import Forecast from './components/forecast';
@@ -16,6 +17,7 @@ import horseFlats from './images/horse_flats.jpg';
 import tuolumne from './images/tuolumne.jpg';
 import { ErrorBoundary } from 'react-error-boundary';
 import ErrorFallback from './components/errorFallback';
+import Spinner from './components/spinner';
 
 const areas = [
   {
@@ -69,9 +71,9 @@ const areas = [
 ];
 
 function App() {
-  const [units, setUnits] = useState('I');
+  const [units, setUnits] = useLocalStorageState('units', 'I');
 
-  const [location, setLocation] = useState(areas[0]);
+  const [location, setLocation] = useLocalStorageState('location', areas[0]);
 
   const [state, setState] = useState({
     status: location ? 'pending' : 'idle',
@@ -172,7 +174,7 @@ function App() {
           </ErrorBoundary>
           <h2 className='text-lg font-semibold'>Today's Highlights</h2>
           {status === 'pending' ? (
-            <div>Loading</div>
+            <Spinner />
           ) : status === 'error' ? (
             <div>
               Something went wrong :( <span>{error.message}</span>

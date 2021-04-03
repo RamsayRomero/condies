@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { utcToZonedTime, format } from 'date-fns-tz';
+import Spinner from './spinner';
 
 export default function Forecast({ location, units }) {
   const [state, setState] = useState({
@@ -38,7 +39,7 @@ export default function Forecast({ location, units }) {
     <div className='py-4 overflow-x-auto'>
       <div className='inline-flex space-x-4 sm:flex justify-between'>
         {status === 'pending' ? (
-          <div>Loading...</div>
+          <Spinner />
         ) : status === 'resolved' ? (
           forecastData.map((day) => {
             const zonedDate = utcToZonedTime(day.valid_date, day.timezone);
