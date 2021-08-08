@@ -1,5 +1,14 @@
 module.exports = {
-  purge: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
+  purge: {
+    content: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
+    safelist: [
+      'green-500',
+      'yellow-400',
+      'yellow-600',
+      'red-700',
+      'purple-900',
+    ],
+  },
   darkMode: false, // or 'media' or 'class'
   theme: {
     fontFamily: {

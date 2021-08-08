@@ -176,8 +176,9 @@ function App() {
           {status === 'pending' ? (
             <Spinner />
           ) : status === 'error' ? (
-            <div>
-              Something went wrong :( <span>{error.message}</span>
+            <div className='p-2'>
+              Something went wrong :( Try refreshing{' '}
+              <span>{error.message}</span>
             </div>
           ) : status === 'resolved' ? (
             <WeatherData units={units} weatherData={weatherData} />

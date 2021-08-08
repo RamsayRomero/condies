@@ -1,6 +1,25 @@
-# Getting Started with Create React App
+# Live Demo
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+https://jovial-goldberg-ee1b37.netlify.app/
+
+## How I built this project
+
+- I wanted to have a an app with a smooth UI where I could see the weather info for my favorite rock climbing areas.
+
+## How to navigate this project
+
+- [Weather Data component](https://github.com/RamsayRomero/condies/blob/main/src/components/weatherData.js) that changes styling based on the incoming weater data.
+- [Custom hook](https://github.com/RamsayRomero/condies/blob/main/src/utils/useLocalStorageState.js) that is used to save user preferences to local storage.
+
+## Why I built the project this way
+
+- I didn't use a library like React Query for data fetching because I wanted to practice [using the built in hooks for fetching data and rendering loading and error states](https://github.com/RamsayRomero/condies/blob/main/src/App.js#L85-L103).
+- I used Tailwind CSS to easily create a responsive layout with different sections that have independent scroll behavior.
+
+## If I had more time I would change this
+
+- Add a feature for users to be able to favorite areas and to add their own areas.
+- Use React Testing Library to add some tests to test the render behavior of UI components based on the incoming data.
 
 ## Available Scripts
 
